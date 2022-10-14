@@ -28,13 +28,13 @@ async function withdrawal(req, res, next) {
         if (validateAccount.userId !== userID) {
             return res.status(401).json({ message: ' Sorry this account is not registered by this customer!' });
         }
-        let walletBalance = customer.wallet;
+        let walletBalance = parseInt(customer.wallet);
         if (amount > walletBalance) {
             return res.status(401).json({ message: 'Insufficient fund!' });
         }
         // fluterwave function here...
         let allBanks = await (0, flutterRequest_1.getAllBanksNG)();
-        const bankCode = allBanks.data.filter(item => item.name.toLowerCase() == bankName.toLowerCase());
+        const bankCode = allBanks.data.filter((item) => item.name.toLowerCase() == bankName.toLowerCase());
         let code = bankCode[0].code;
         const details = {
             // account_bank: '044',
@@ -50,7 +50,7 @@ async function withdrawal(req, res, next) {
         };
         const flutta = await (0, flutterRequest_1.initTrans)(details);
         if (flutta.status === 'success') {
-            const newWalletBalance = walletBalance - amount;
+            const newWalletBalance = (walletBalance - amount).toString();
             const customerUpdatedRecord = await userModel_1.UserInstance.update({ wallet: newWalletBalance }, { where: { id: userID } });
             const withdrawalHistory = await withdrawal_1.WithdrawalInstance.create({
                 id: withdrawalId,
