@@ -8,7 +8,7 @@
     "compile": "tsc -w",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build": "nodemon www",
+    "build": "tsc",
     "test-dev": "jest --detectOpenHandles --colors --verbose --ci",
     "test": "jest --config jest.config.ts __test__/app.test.ts",
     "coverage": "npm test -- --coverage --watchAll=false"

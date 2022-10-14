@@ -28,7 +28,7 @@ export async function withdrawal(req: Request|any, res: Response, next: NextFunc
         if (validateAccount.userId !== userID) {
             return res.status(401).json({message: ' Sorry this account is not registered by this customer!'})
         }
-        let walletBalance = customer.wallet;
+        let walletBalance = parseInt(customer.wallet);
 
         if (amount > walletBalance) {
             return res.status(401).json({message:'Insufficient fund!'})
@@ -54,7 +54,7 @@ const flutta = await initTrans(details)
 
 
         if (flutta.status === 'success') {
-            const newWalletBalance = walletBalance - amount
+            const newWalletBalance = (walletBalance - amount).toString()
 const customerUpdatedRecord = await UserInstance.update({ wallet: newWalletBalance }, { where: { id: userID } })
             const withdrawalHistory = await WithdrawalInstance.create({
                 id: withdrawalId,
